@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const admin = require('./routes/admin')
 const path= require('path')
+const mongoose = require('mongoose')
 
 // const mongoose = require('mongoose')
 
@@ -17,12 +18,23 @@ const path= require('path')
     // Handlebars
         app.engine('handlebars', engine({defaultLayout:'main'}))
         app.set('view engine', 'handlebars')
-    
-    // Mongoose
 
 
     //Public
         app.use(express.static(path.join(__dirname,'public')))
+
+        app.use((req,res,next)=>{
+            console.log('Oi eu sou o middleware')
+            next()
+        })
+
+    // Mongoose
+        mongoose.Promise= global.Promise
+        mongoose.connect('mongodb://localhost/blogapp').then(() => {
+            console.log('Conectado ao mongo')
+        }).catch((erro)=>{
+            console.log('Falha ao conectar' + erro)
+        })
 
 
 // Rotas: 
