@@ -8,7 +8,13 @@ router.get('/',(req,res)=>{
     res.render('admin/index')
 })
 router.get('/categorias',(req,res)=>{
-    res.render('admin/categorias')
+  Categoria.find().then((categorias)=>{
+    res.render('admin/categorias', {categorias: categorias})
+  }).catch((err)=>{
+    req.flash('error_msg', 'Houve um erro ao listar as categorias')
+    res.render('/admin')
+  })
+    
 })
 router.get('/categorias/add',(req,res)=>{
     res.render('admin/add')

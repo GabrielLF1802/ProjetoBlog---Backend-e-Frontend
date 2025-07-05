@@ -32,18 +32,17 @@ const flash= require('connect-flash')
         app.use(bodyParser.urlencoded({extended:false}))
         app.use(bodyParser.json())
     // Handlebars
-        app.engine('handlebars', engine({defaultLayout:'main'}))
+        app.engine('handlebars', engine({defaultLayout:'main',runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
+  }}))
         app.set('view engine', 'handlebars')
 
 
     //Public
         app.use(express.static(path.join(__dirname,'public')))
 
-    // Middleware
-        app.use((req,res,next)=>{
-            console.log('Oi eu sou o middleware')
-            next()
-        })
+
 
 
     // Mongoose
