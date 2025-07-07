@@ -92,4 +92,18 @@ router.post('/categorias/delet',(req,res)=>{
   })
 })
 
+router.get('/postagens', (req,res)=>{
+  res.render('admin/postagens')
+})
+router.get('/postagens/add',(req,res)=>{
+  Categoria.find().then((categorias)=>{
+    res.render('admin/addpostagem',{categorias:categorias})
+  }).catch((err)=>{
+    req.flash('error_msg','Erro ao carregar o formulário')
+  })
+})
+
 module.exports = router
+
+
+// Fazer verificação do delet e do edit 
