@@ -11,6 +11,8 @@ const session = require('express-session')
 const flash= require('connect-flash')
 require('./models/Postagem')
 const Postagem= mongoose.model('postagens')
+require('./models/Categoria')
+const Categoria= mongoose.model('categorias')
 
 // const mongoose = require('mongoose')
 
@@ -71,6 +73,39 @@ app.get('/',(req,res)=>{
 })
 app.get('/404',(req,res)=>{
     res.send('Erro 404')
+})
+app.get('/postagens/:slug',(req,res)=>{
+    Postagem.findOne({slug:req.params.slug}).then((postagens)=>{
+        if(postagens){
+            res.render('postagem/index',{postagens:postagens})
+        }else{
+            req.flash('error_msg','Postagem não encontrada')
+        }
+    }).catch((err)=>{
+        req.flash('error_msg','Erro interno')
+        res.redirect('/categoria/categorias')
+    })
+})
+app.get('/categorias',(req,res)=>{
+    Categoria.find().then((categorias)=>{
+        res.render('categoria/categorias',{categorias:categorias})
+    }).catch((err)=>{
+        req.flash('error_msg','Erro ao listar as categorias')
+        res.redirect('/')
+    })
+})
+app.get('/categorias/:slug',(req,res)=>{
+    Categoria.findOne({slug:req.params.slug}).then((categoria)=>{
+        Postagem.find({categoria: categoria._id}).then((postagens)=>{
+            res.render('categoria/postagens',{categoria:categoria, postagens:postagens})
+        }).catch((err)=>{
+            req.flash('error_msg','Postagens não encontradas')
+            res.redirect('/categorias')
+        })
+    }).catch((err)=>{
+        req.flash('error_msg','Categoria da postagem não encontrada')
+        res.redirect('/categorias')
+    })
 })
 
 
