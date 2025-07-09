@@ -13,6 +13,7 @@ require('./models/Postagem')
 const Postagem= mongoose.model('postagens')
 require('./models/Categoria')
 const Categoria= mongoose.model('categorias')
+const usuario= require('./routes/usuario')
 
 // const mongoose = require('mongoose')
 
@@ -61,6 +62,7 @@ const Categoria= mongoose.model('categorias')
 // Rotas: 
 
 app.use('/admin',admin)
+app.use('/usuario', usuario)
 
 // Page Home
 app.get('/',(req,res)=>{
