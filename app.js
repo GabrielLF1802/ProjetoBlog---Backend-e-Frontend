@@ -16,6 +16,7 @@ const Categoria= mongoose.model('categorias')
 const usuario= require('./routes/usuario')
 const passport= require('passport')
 require('./config/auth')(passport)
+const db= require('./config/db')
 
 
 // const mongoose = require('mongoose')
@@ -61,7 +62,7 @@ require('./config/auth')(passport)
 
     // Mongoose
         mongoose.Promise= global.Promise
-        mongoose.connect('mongodb://localhost/blogapp').then(() => {
+        mongoose.connect(db.mongoURI).then(() => {
             console.log('Conectado ao mongo')
         }).catch((erro)=>{
             console.log('Falha ao conectar' + erro)
@@ -121,7 +122,7 @@ app.get('/categorias/:slug',(req,res)=>{
 
 
 // Inicialização do Servidor
-const PORT = 8081
+const PORT =  process.env.PORT|| 8081
 app.listen(PORT, ()=>{
     console.log('Server Started!')
 })
